@@ -71,7 +71,7 @@ service, not a library or ML experiment):
 
 Deployment note: Vercel's Python function builder reads
 `api/requirements.txt`, not `pyproject.toml`. We keep `pyproject.toml`
-+ uv as the source of truth for local dev/tooling, and generate
+and uv as the source of truth for local dev/tooling, and generate
 `api/requirements.txt` via `uv export --no-hashes` as a build step (or
 committed artifact) for what Vercel actually installs.
 
