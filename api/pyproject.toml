@@ -1,0 +1,44 @@
+[project]
+name = "datezap-api"
+version = "0.1.0"
+description = "FastAPI backend wrapping nepkit for datezap"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115,<1",
+    "pydantic>=2.9,<3",
+    "nepkit>=0.4,<0.5",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8,<1",
+    "mypy>=1.13,<2",
+    "pytest>=8.3,<9",
+    "pytest-cov>=6.0,<7",
+    "httpx>=0.27,<1",
+    "pre-commit>=4.0,<5",
+]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+addopts = "--cov=datezap_api --cov-report=term-missing"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/datezap_api"]
