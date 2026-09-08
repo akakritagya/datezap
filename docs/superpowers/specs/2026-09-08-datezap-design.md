@@ -52,6 +52,40 @@ Single Vercel project, single repo:
 FastAPI's automatic docs at `/api/docs` (Swagger UI) serve as the
 public API documentation — no hand-written docs page to maintain.
 
+## Backend tooling
+
+Scaffolded with the `py-init` toolchain, `app` profile (it's a
+service, not a library or ML experiment):
+
+- **uv** for dependency management (`fastapi`, `pydantic`, `nepkit`
+  as runtime deps).
+- **ruff** for linting and formatting.
+- **mypy** for static type checking — route handlers, pydantic
+  models, and nepkit's own typed API (`BSDate` etc.) are all fully
+  annotated (see Type hints below), so this should run clean.
+- **pytest** (+ coverage) for the backend test suite.
+- **pre-commit** running all of the above before each commit.
+- Layout: `api/pyproject.toml` + `api/src/datezap_api/` package,
+  consistent with py-init's standard structure, adapted to live
+  under `api/` alongside the Vercel Python function entrypoint.
+
+Deployment note: Vercel's Python function builder reads
+`api/requirements.txt`, not `pyproject.toml`. We keep `pyproject.toml`
++ uv as the source of truth for local dev/tooling, and generate
+`api/requirements.txt` via `uv export --no-hashes` as a build step (or
+committed artifact) for what Vercel actually installs.
+
+## Type hints
+
+All backend code is fully type-hinted (mypy-checked per above):
+route handlers annotate parameters and return types (return types
+drive the documented OpenAPI response schema); pydantic model fields
+are all typed (e.g. `direction: Literal["bs2ad", "ad2bs"]`); modern
+syntax throughout — `Annotated[int, Query(ge=2000, le=2090)]` for
+constrained query params, PEP 604 unions (`str | None`) over
+`Optional[str]`. Handler bodies pass/return nepkit's own typed objects
+(`BSDate`) directly rather than re-stringifying by hand.
+
 ## Frontend (Next.js pages)
 
 - `/` — converter: BS↔AD conversion form + a "today" widget.
