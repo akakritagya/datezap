@@ -1,13 +1,14 @@
-import type { ReactNode } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 
 type BoardPanelProps = {
   children: ReactNode;
   className?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 };
 
-export function BoardPanel({ children, className = "" }: BoardPanelProps) {
+export function BoardPanel({ children, className = "", onClick }: BoardPanelProps) {
   return (
-    <div className={`board-panel ${className}`}>
+    <div className={`board-panel ${className}`} onClick={onClick}>
       <span className="rivet rivet-left" />
       <span className="rivet rivet-right" />
       {children}

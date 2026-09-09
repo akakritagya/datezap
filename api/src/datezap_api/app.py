@@ -16,9 +16,10 @@ from datezap_api.schemas import (
     ConvertRequest,
     ConvertResponse,
     DateRangeResponse,
+    MonthQueryResponse,
     TodayResponse,
 )
-from datezap_api.service import ConvertResult, convert_date, get_today
+from datezap_api.service import ConvertResult, convert_date, get_today, resolve_month_query
 
 app = FastAPI(
     title="datezap API",
@@ -90,6 +91,12 @@ async def convert(payload: ConvertRequest) -> ConvertResponse:
 async def today(devnagari: bool = False) -> TodayResponse:
     result = get_today()
     return TodayResponse(**_convert_result_fields(result, devnagari=devnagari))
+
+
+@app.get("/api/calendar/resolve", response_model=MonthQueryResponse)
+async def calendar_resolve(query: str) -> MonthQueryResponse:
+    year, month = resolve_month_query(query)
+    return MonthQueryResponse(year=year, month=month)
 
 
 @app.get("/api/calendar", response_model=CalendarResponse)
