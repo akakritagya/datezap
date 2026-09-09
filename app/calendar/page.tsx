@@ -86,7 +86,7 @@ export default function CalendarPage() {
             onClick={goToPrevious}
             disabled={atMinYear}
             aria-label="Previous month"
-            className="flex items-center gap-1 rounded border border-panel-line bg-casing-deep px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:border-amber hover:text-ivory disabled:cursor-not-allowed disabled:border-hazard/30 disabled:hover:border-hazard/30 disabled:hover:text-muted"
+            className="flex items-center gap-1 rounded-full border border-panel-line bg-casing-deep px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:border-amber hover:text-ivory disabled:cursor-not-allowed disabled:border-hazard/30 disabled:hover:border-hazard/30 disabled:hover:text-muted"
           >
             {atMinYear ? (
               <EndStopIcon className="h-3.5 w-3.5 text-hazard" />
@@ -103,7 +103,7 @@ export default function CalendarPage() {
             onClick={goToNext}
             disabled={atMaxYear}
             aria-label="Next month"
-            className="flex items-center gap-1 rounded border border-panel-line bg-casing-deep px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:border-amber hover:text-ivory disabled:cursor-not-allowed disabled:border-hazard/30 disabled:hover:border-hazard/30 disabled:hover:text-muted"
+            className="flex items-center gap-1 rounded-full border border-panel-line bg-casing-deep px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:border-amber hover:text-ivory disabled:cursor-not-allowed disabled:border-hazard/30 disabled:hover:border-hazard/30 disabled:hover:text-muted"
           >
             Next
             {atMaxYear ? (
