@@ -6,6 +6,7 @@ import type { CalendarDayCell, CalendarResponse } from "@/lib/api";
 import { CalendarGrid } from "@/components/CalendarGrid";
 import { BoardPanel } from "@/components/BoardPanel";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
+import { useDevnagari } from "@/lib/devnagari-context";
 
 export type NepaliDateSelection = {
   bs: string;
@@ -23,6 +24,7 @@ export function NepaliDatePicker({
   initialMonth,
   onSelect,
 }: NepaliDatePickerProps) {
+  const { devnagari } = useDevnagari();
   const [year, setYear] = useState<number | null>(initialYear ?? null);
   const [month, setMonth] = useState<number | null>(initialMonth ?? null);
   const [data, setData] = useState<CalendarResponse | null>(null);
@@ -45,7 +47,7 @@ export function NepaliDatePicker({
 
   useEffect(() => {
     if (year === null || month === null) return;
-    getCalendarMonth(year, month)
+    getCalendarMonth(year, month, devnagari)
       .then((response) => {
         setData(response);
         setError(null);
@@ -53,7 +55,7 @@ export function NepaliDatePicker({
       .catch((err) => {
         setError(err instanceof ApiError ? err.message : "Something went wrong.");
       });
-  }, [year, month]);
+  }, [year, month, devnagari]);
 
   function goToPreviousMonth() {
     if (year === null || month === null) return;

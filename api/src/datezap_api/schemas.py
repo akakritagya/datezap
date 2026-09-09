@@ -16,6 +16,7 @@ class BSDateOut(BaseModel):
 class ConvertRequest(BaseModel):
     direction: Literal["bs2ad", "ad2bs"]
     value: str
+    devnagari: bool = False
 
 
 class ConvertResponse(BaseModel):
@@ -35,6 +36,7 @@ class CalendarDayCell(BaseModel):
     bs_day: int | None
     ad_date: str | None
     is_today: bool
+    day_label: str | None
 
 
 class CalendarResponse(BaseModel):
@@ -48,3 +50,10 @@ class CalendarResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error_code: str
     message: str
+
+
+class DateRangeResponse(BaseModel):
+    bs_min_year: int
+    bs_max_year: int
+    ad_min: str
+    ad_max: str
