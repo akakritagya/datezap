@@ -23,10 +23,10 @@ export default function PickerDemoPage() {
         </p>
       </div>
 
-      <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-start">
+      <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
         <NepaliDatePicker onSelect={setSelected} />
 
-        <BoardPanel className="flex-1 px-5 py-6 sm:px-6">
+        <BoardPanel className="w-72 px-5 py-6 md:w-auto md:flex-1 md:px-6">
           <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
             Selected value
           </span>
