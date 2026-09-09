@@ -22,13 +22,13 @@ export function Footer() {
 
   return (
     <footer className="border-t border-panel-line bg-casing-deep">
-      <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-x-8 gap-y-3 px-6 py-4">
+      <div className="mx-auto flex max-w-4xl flex-col items-center gap-3 px-6 py-4 text-center md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-8 md:text-left">
         <span className="font-sans text-xs text-muted">
           {range
             ? `Covers BS ${range.bs_min_year}–${range.bs_max_year} · AD ${range.ad_min} – ${range.ad_max}`
             : "Covers a bundled BS/AD date range"}
         </span>
-        <nav aria-label="Project links" className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <nav aria-label="Project links" className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 md:justify-start">
           {LINKS.map((link) => (
             <a
               key={link.href}
