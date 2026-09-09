@@ -3,7 +3,9 @@
 A small web app showcasing real-world use cases for
 [nepkit](https://github.com/akakritagya/nepkit)
 ([PyPI](https://pypi.org/project/nepkit/)), a typed Bikram Sambat (BS)
-<-> Gregorian (AD) date conversion library for Python.
+<-> Gregorian (AD) date conversion library for Python. The frontend is
+styled as a split-flap departure board, with an optional Devnagari
+script toggle for Nepali dates.
 
 - `/` — single-date converter (BS<->AD, ISO or natural language) + a
   "today in BS" widget
