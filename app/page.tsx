@@ -115,7 +115,7 @@ export default function HomePage() {
                     id: "bs2ad",
                     label: (
                       <>
-                        BS <span className="inline-block -translate-y-[2px]">→</span> AD
+                        BS <span className="inline-block -translate-y-0.5">→</span> AD
                       </>
                     ),
                   },
@@ -123,7 +123,7 @@ export default function HomePage() {
                     id: "ad2bs",
                     label: (
                       <>
-                        AD <span className="inline-block -translate-y-[2px]">→</span> BS
+                        AD <span className="inline-block -translate-y-0.5">→</span> BS
                       </>
                     ),
                   },
