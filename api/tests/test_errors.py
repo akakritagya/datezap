@@ -15,3 +15,14 @@ def test_out_of_range_error_maps_to_422() -> None:
     exc = nepkit.DateOutOfRangeError("BS year 1500 is outside the bundled range [2000, 2090]")
     assert status_code_for(exc) == 422
     assert error_response_for(exc).error_code == "DateOutOfRangeError"
+
+
+def test_calendar_data_error_maps_to_500() -> None:
+    exc = nepkit.CalendarDataError("calendar.json is not valid JSON")
+    assert status_code_for(exc) == 500
+    assert error_response_for(exc).error_code == "CalendarDataError"
+
+
+def test_unclassified_nepkit_error_falls_back_to_500() -> None:
+    exc = nepkit.NepkitError("some future error type")
+    assert status_code_for(exc) == 500

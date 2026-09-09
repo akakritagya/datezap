@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ExternalLinkIcon } from "@/components/icons";
+import { useDevnagari } from "@/lib/devnagari-context";
 
 const ROUTES = [
   { href: "/", label: "Converter" },
@@ -12,6 +13,7 @@ const ROUTES = [
 
 export function Nav() {
   const pathname = usePathname();
+  const { devnagari, setDevnagari } = useDevnagari();
 
   return (
     <header className="border-b border-panel-line bg-casing-deep">
@@ -45,6 +47,19 @@ export function Nav() {
               </Link>
             );
           })}
+          <button
+            type="button"
+            onClick={() => setDevnagari(!devnagari)}
+            aria-pressed={devnagari}
+            title="Toggle devnagari numerals"
+            className={`ml-2 rounded border px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-wide transition-colors ${
+              devnagari
+                ? "border-amber text-amber"
+                : "border-panel-line text-muted hover:border-amber hover:text-ivory"
+            }`}
+          >
+            Devnagari
+          </button>
           <a
             href="/api/docs"
             className="ml-2 flex items-center gap-1.5 rounded border border-panel-line px-3 py-1.5 font-sans text-xs font-semibold uppercase tracking-wide text-muted transition-colors hover:border-amber hover:text-ivory"

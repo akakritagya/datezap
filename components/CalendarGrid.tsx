@@ -54,7 +54,7 @@ export function CalendarGrid({ weeks, onDayClick, selectedDay = null, compact = 
                       }`}
                     >
                       <span className="flap-cell__face" key={cell.bs_day}>
-                        {cell.bs_day}
+                        {cell.day_label}
                       </span>
                       {selected && (
                         <LatchIcon className="absolute bottom-1 left-1 h-3 w-3 text-amber" />

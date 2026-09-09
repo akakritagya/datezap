@@ -1,24 +1,39 @@
 import type { Metadata } from "next";
-import { Big_Shoulders, Martian_Mono, Archivo } from "next/font/google";
+import { Big_Shoulders, Martian_Mono, Archivo, Noto_Sans_Devanagari } from "next/font/google";
 import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
+import { DevnagariProvider } from "@/lib/devnagari-context";
 import "./globals.css";
 
+// These raw variable names are distinct from the --font-display/-flap/-sans
+// Tailwind theme tokens (see globals.css @theme inline) so the theme layer
+// can compose each with the devnagari fallback below without the custom
+// property self-referencing itself (which CSS treats as invalid and drops).
 const display = Big_Shoulders({
-  variable: "--font-display",
+  variable: "--font-display-raw",
   subsets: ["latin"],
   weight: ["700", "800", "900"],
 });
 
 const mono = Martian_Mono({
-  variable: "--font-flap",
+  variable: "--font-flap-raw",
   subsets: ["latin"],
   weight: ["500", "700"],
 });
 
 const sans = Archivo({
-  variable: "--font-sans",
+  variable: "--font-sans-raw",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+// None of the fonts above ship Devanagari glyphs -- this is the fallback the
+// three stacks above delegate to (see globals.css) whenever the devnagari
+// toggle renders digits/names Big Shoulders, Martian Mono, and Archivo can't.
+const devnagari = Noto_Sans_Devanagari({
+  variable: "--font-devnagari",
+  subsets: ["devanagari"],
+  weight: ["500", "700"],
 });
 
 const FAVICON = `data:image/svg+xml,${encodeURIComponent(
@@ -36,7 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${display.variable} ${mono.variable} ${sans.variable} h-full`}
+      className={`${display.variable} ${mono.variable} ${sans.variable} ${devnagari.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-casing text-ivory font-sans antialiased">
         <div
@@ -60,8 +75,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 -->`,
           }}
         />
-        <Nav />
-        <div className="flex-1">{children}</div>
+        <DevnagariProvider>
+          <Nav />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </DevnagariProvider>
       </body>
     </html>
   );

@@ -11,8 +11,21 @@ const SIZE_CLASSES: Record<NonNullable<FlapRowProps["size"]>, string> = {
   lg: "h-16 w-11 text-3xl sm:h-20 sm:w-14 sm:text-4xl",
 };
 
+// Splitting on UTF-16 code units (value.split("")) tears a devnagari base
+// consonant apart from its combining vowel sign, leaving the sign alone in
+// its own flap cell with no visible glyph. Segment by grapheme cluster
+// instead so each flap cell holds one complete, renderable character.
+const segmenter =
+  typeof Intl !== "undefined" && "Segmenter" in Intl
+    ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
+    : null;
+
+function splitGraphemes(value: string): string[] {
+  return segmenter ? Array.from(segmenter.segment(value), (s) => s.segment) : Array.from(value);
+}
+
 export function FlapRow({ value, label, size = "md", hazard = false }: FlapRowProps) {
-  const chars = value.split("");
+  const chars = splitGraphemes(value);
   const cellClass = SIZE_CLASSES[size];
 
   return (

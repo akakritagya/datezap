@@ -32,9 +32,44 @@
   --color-amber-ink: var(--amber-ink);
   --color-hazard: var(--hazard);
   --color-hazard-ink: var(--hazard-ink);
-  --font-display: var(--font-display);
-  --font-flap: var(--font-flap);
-  --font-sans: var(--font-sans);
+  /* Single-value passthroughs here so Tailwind reliably registers the
+     font-display/-flap/-sans utilities; the devnagari-fallback composition
+     is applied below instead of here -- Tailwind v4 silently drops the
+     composed form for --font-sans specifically (a reserved default theme
+     key), while --font-display/--font-flap (not reserved) work either way. */
+  --font-display: var(--font-display-raw);
+  --font-flap: var(--font-flap-raw);
+  --font-sans: var(--font-sans-raw);
+}
+
+/* devnagari fallback appended so glyphs Big Shoulders/Martian Mono/Archivo
+   don't have (used when the devnagari toggle is on) still render, instead of
+   falling through to tofu boxes or an inconsistent OS-level substitution.
+   Ordinary :root rule, after @theme inline, so it applies uniformly to all
+   three regardless of Tailwind's per-key handling above. */
+:root {
+  --font-display: var(--font-display-raw), var(--font-devnagari);
+  --font-flap: var(--font-flap-raw), var(--font-devnagari);
+  --font-sans: var(--font-sans-raw), var(--font-devnagari);
+}
+
+/* @theme inline statically inlines var(--font-*-raw) directly into the
+   generated .font-display/.font-flap/.font-sans utilities (Tailwind's
+   "inline" substitution), so those utilities never actually read the
+   --font-display/-flap/-sans custom properties above -- the :root override
+   only reaches hand-written rules like .flap-cell. These plain, unlayered
+   rules override the utilities directly; being unlayered, they beat
+   Tailwind's @layer utilities regardless of source order. */
+.font-display {
+  font-family: var(--font-display-raw), var(--font-devnagari);
+}
+
+.font-flap {
+  font-family: var(--font-flap-raw), var(--font-devnagari);
+}
+
+.font-sans {
+  font-family: var(--font-sans-raw), var(--font-devnagari);
 }
 
 * {

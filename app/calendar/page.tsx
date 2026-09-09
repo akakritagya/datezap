@@ -6,6 +6,7 @@ import type { CalendarResponse } from "@/lib/api";
 import { CalendarGrid } from "@/components/CalendarGrid";
 import { BoardPanel } from "@/components/BoardPanel";
 import { ChevronLeftIcon, ChevronRightIcon, EndStopIcon, WarningIcon } from "@/components/icons";
+import { useDevnagari } from "@/lib/devnagari-context";
 
 const MIN_BS_YEAR = 2000;
 const MAX_BS_YEAR = 2090;
@@ -19,6 +20,7 @@ function previousMonth(year: number, month: number): [number, number] {
 }
 
 export default function CalendarPage() {
+  const { devnagari } = useDevnagari();
   const [year, setYear] = useState<number | null>(null);
   const [month, setMonth] = useState<number | null>(null);
   const [data, setData] = useState<CalendarResponse | null>(null);
@@ -37,7 +39,7 @@ export default function CalendarPage() {
 
   useEffect(() => {
     if (year === null || month === null) return;
-    getCalendarMonth(year, month)
+    getCalendarMonth(year, month, devnagari)
       .then((response) => {
         setData(response);
         setError(null);
@@ -45,7 +47,7 @@ export default function CalendarPage() {
       .catch((err) => {
         setError(err instanceof ApiError ? err.message : "Something went wrong.");
       });
-  }, [year, month]);
+  }, [year, month, devnagari]);
 
   const ready = year !== null && month !== null;
   const atMinYear = !ready || previousMonth(year, month)[0] < MIN_BS_YEAR;

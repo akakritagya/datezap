@@ -25,6 +25,7 @@ export type CalendarDayCell = {
   bs_day: number | null;
   ad_date: string | null;
   is_today: boolean;
+  day_label: string | null;
 };
 
 export type CalendarResponse = {
@@ -33,6 +34,13 @@ export type CalendarResponse = {
   title: string;
   subtitle: string;
   weeks: CalendarDayCell[][];
+};
+
+export type DateRangeResponse = {
+  bs_min_year: number;
+  bs_max_year: number;
+  ad_min: string;
+  ad_max: string;
 };
 
 type ApiErrorBody = {
@@ -63,21 +71,31 @@ async function parseJsonOrThrow<T>(response: Response): Promise<T> {
 export async function convertDate(
   direction: ConvertDirection,
   value: string,
+  devnagari = false,
 ): Promise<ConvertResponse> {
   const response = await fetch("/api/convert", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ direction, value }),
+    body: JSON.stringify({ direction, value, devnagari }),
   });
   return parseJsonOrThrow<ConvertResponse>(response);
 }
 
-export async function getToday(): Promise<TodayResponse> {
-  const response = await fetch("/api/today");
+export async function getToday(devnagari = false): Promise<TodayResponse> {
+  const response = await fetch(`/api/today?devnagari=${devnagari}`);
   return parseJsonOrThrow<TodayResponse>(response);
 }
 
-export async function getCalendarMonth(year: number, month: number): Promise<CalendarResponse> {
-  const response = await fetch(`/api/calendar?year=${year}&month=${month}`);
+export async function getCalendarMonth(
+  year: number,
+  month: number,
+  devnagari = false,
+): Promise<CalendarResponse> {
+  const response = await fetch(`/api/calendar?year=${year}&month=${month}&devnagari=${devnagari}`);
   return parseJsonOrThrow<CalendarResponse>(response);
+}
+
+export async function getRange(): Promise<DateRangeResponse> {
+  const response = await fetch("/api/range");
+  return parseJsonOrThrow<DateRangeResponse>(response);
 }

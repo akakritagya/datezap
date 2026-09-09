@@ -7,13 +7,22 @@ import type { ConvertDirection, ConvertResponse, TodayResponse } from "@/lib/api
 import { BoardPanel } from "@/components/BoardPanel";
 import { FlapRow } from "@/components/FlapRow";
 import { WarningIcon } from "@/components/icons";
+import { useDevnagari } from "@/lib/devnagari-context";
 
 export default function HomePage() {
+  const { devnagari } = useDevnagari();
   const [direction, setDirection] = useState<ConvertDirection>("bs2ad");
   const [value, setValue] = useState("");
+  const [submitted, setSubmitted] = useState<{ direction: ConvertDirection; value: string } | null>(
+    null,
+  );
   const [result, setResult] = useState<ConvertResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [today, setToday] = useState<TodayResponse | null>(null);
+  // The "Today" widget's BS side honors the toggle; the input placeholder is
+  // a typing hint and must stay in the Latin format users can actually type,
+  // so it's always built from `today` (fetched without devnagari) below.
+  const [todayBsNamedDevnagari, setTodayBsNamedDevnagari] = useState<string | null>(null);
 
   useEffect(() => {
     getToday()
@@ -21,16 +30,39 @@ export default function HomePage() {
       .catch(() => setToday(null));
   }, []);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    if (!devnagari) return;
+    getToday(true)
+      .then((response) => setTodayBsNamedDevnagari(response.bs.named))
+      .catch(() => setTodayBsNamedDevnagari(null));
+  }, [devnagari]);
+
+  // Re-fetches whenever a new date is submitted, and also when the devnagari
+  // toggle changes -- so a result already on screen flips language in place
+  // instead of staying frozen in whatever language it was fetched in.
+  useEffect(() => {
+    if (!submitted) return;
+    let cancelled = false;
+    convertDate(submitted.direction, submitted.value, devnagari)
+      .then((response) => {
+        if (cancelled) return;
+        setResult(response);
+        setError(null);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setError(err instanceof ApiError ? err.message : "Something went wrong.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [submitted, devnagari]);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setResult(null);
-    try {
-      const response = await convertDate(direction, value);
-      setResult(response);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Something went wrong.");
-    }
+    setSubmitted({ direction, value });
   }
 
   return (
@@ -51,7 +83,11 @@ export default function HomePage() {
         </span>
         {today ? (
           <div className="flex flex-wrap items-center gap-4">
-            <FlapRow label="Today in Bikram Sambat" value={today.bs.named} size="sm" />
+            <FlapRow
+              label="Today in Bikram Sambat"
+              value={devnagari && todayBsNamedDevnagari ? todayBsNamedDevnagari : today.bs.named}
+              size="sm"
+            />
             <span className="font-sans text-sm text-muted">{today.ad_named}</span>
           </div>
         ) : (
@@ -136,14 +172,14 @@ export default function HomePage() {
         <BoardPanel className="flex flex-col gap-6 px-5 py-7 sm:px-8 sm:py-9">
           <div className="flex flex-col gap-2">
             <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-              Bikram Sambat
+              Bikram Sambat (BS)
             </span>
             <FlapRow label="Bikram Sambat result" value={result.bs.named} size="lg" />
             <span className="font-sans text-sm text-muted">{result.bs.iso}</span>
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-              Gregorian
+              Gregorian (AD)
             </span>
             <FlapRow label="Gregorian result" value={result.ad_named} size="lg" />
             <span className="font-sans text-sm text-muted">{result.ad}</span>
