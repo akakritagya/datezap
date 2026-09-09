@@ -155,7 +155,7 @@ export default function HomePage() {
             </span>
             <span className="-mt-1 font-sans text-xs text-muted">
               {range
-                ? `Covers BS ${range.bs_min_year}–${range.bs_max_year} · AD ${range.ad_min} – ${range.ad_max}`
+                ? `Covers BS ${range.bs_min_year} – ${range.bs_max_year} · AD ${range.ad_min} – ${range.ad_max}`
                 : "Covers a bundled BS/AD date range"}
             </span>
             <input
