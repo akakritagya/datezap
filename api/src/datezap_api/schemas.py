@@ -57,3 +57,8 @@ class DateRangeResponse(BaseModel):
     bs_max_year: int
     ad_min: str
     ad_max: str
+
+
+class MonthQueryResponse(BaseModel):
+    year: int
+    month: int

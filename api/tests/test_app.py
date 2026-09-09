@@ -122,6 +122,30 @@ def test_calendar_day_label_defaults_to_latin_digits() -> None:
     assert body["weeks"][0][0]["day_label"] is None
 
 
+def test_calendar_resolve_numeric_mm_yyyy() -> None:
+    response = client.get("/api/calendar/resolve", params={"query": "04-2081"})
+    assert response.status_code == 200
+    assert response.json() == {"year": 2081, "month": 4}
+
+
+def test_calendar_resolve_month_name() -> None:
+    response = client.get("/api/calendar/resolve", params={"query": "Bhadra 2083"})
+    assert response.status_code == 200
+    assert response.json() == {"year": 2083, "month": 5}
+
+
+def test_calendar_resolve_invalid_query_returns_400() -> None:
+    response = client.get("/api/calendar/resolve", params={"query": "not a query"})
+    assert response.status_code == 400
+    assert response.json()["error_code"] == "InvalidDateError"
+
+
+def test_calendar_resolve_out_of_range_year_returns_422() -> None:
+    response = client.get("/api/calendar/resolve", params={"query": "Baisakh 1500"})
+    assert response.status_code == 422
+    assert response.json()["error_code"] == "DateOutOfRangeError"
+
+
 def test_range_returns_bundled_bounds() -> None:
     response = client.get("/api/range")
     assert response.status_code == 200

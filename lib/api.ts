@@ -43,6 +43,11 @@ export type DateRangeResponse = {
   ad_max: string;
 };
 
+export type MonthQueryResponse = {
+  year: number;
+  month: number;
+};
+
 type ApiErrorBody = {
   error_code?: unknown;
   message?: unknown;
@@ -98,4 +103,9 @@ export async function getCalendarMonth(
 export async function getRange(): Promise<DateRangeResponse> {
   const response = await fetch("/api/range");
   return parseJsonOrThrow<DateRangeResponse>(response);
+}
+
+export async function resolveMonthQuery(query: string): Promise<MonthQueryResponse> {
+  const response = await fetch(`/api/calendar/resolve?query=${encodeURIComponent(query)}`);
+  return parseJsonOrThrow<MonthQueryResponse>(response);
 }
