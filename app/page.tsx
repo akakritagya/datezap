@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { ApiError, convertDate, getToday } from "@/lib/api";
-import type { ConvertDirection, ConvertResponse, TodayResponse } from "@/lib/api";
+import { ApiError, convertDate, getRange, getToday } from "@/lib/api";
+import type { ConvertDirection, ConvertResponse, DateRangeResponse, TodayResponse } from "@/lib/api";
 import { BoardPanel } from "@/components/BoardPanel";
 import { FlapRow } from "@/components/FlapRow";
 import { WarningIcon } from "@/components/icons";
@@ -19,6 +19,7 @@ export default function HomePage() {
   const [result, setResult] = useState<ConvertResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [today, setToday] = useState<TodayResponse | null>(null);
+  const [range, setRange] = useState<DateRangeResponse | null>(null);
   // The "Today" widget's BS side honors the toggle; the input placeholder is
   // a typing hint and must stay in the Latin format users can actually type,
   // so it's always built from `today` (fetched without devnagari) below.
@@ -28,6 +29,12 @@ export default function HomePage() {
     getToday()
       .then(setToday)
       .catch(() => setToday(null));
+  }, []);
+
+  useEffect(() => {
+    getRange()
+      .then(setRange)
+      .catch(() => setRange(null));
   }, []);
 
   useEffect(() => {
@@ -101,11 +108,25 @@ export default function HomePage() {
             <legend className="mb-1 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Direction
             </legend>
-            <div className="inline-flex w-fit overflow-hidden rounded border border-panel-line">
+            <div className="inline-flex w-fit overflow-hidden rounded-xl border border-panel-line">
               {(
                 [
-                  { id: "bs2ad", label: "BS → AD" },
-                  { id: "ad2bs", label: "AD → BS" },
+                  {
+                    id: "bs2ad",
+                    label: (
+                      <>
+                        BS <span className="inline-block -translate-y-[2px]">→</span> AD
+                      </>
+                    ),
+                  },
+                  {
+                    id: "ad2bs",
+                    label: (
+                      <>
+                        AD <span className="inline-block -translate-y-[2px]">→</span> BS
+                      </>
+                    ),
+                  },
                 ] as const
               ).map((option) => (
                 <button
@@ -116,7 +137,7 @@ export default function HomePage() {
                     setValue("");
                   }}
                   aria-pressed={direction === option.id}
-                  className={`px-4 py-2 font-display text-sm font-bold uppercase tracking-wide transition-colors ${
+                  className={`cursor-pointer px-4 py-2 font-display text-sm font-bold uppercase tracking-wide transition-colors ${
                     direction === option.id
                       ? "bg-amber text-amber-ink"
                       : "bg-casing-deep text-muted hover:text-ivory"
@@ -132,6 +153,11 @@ export default function HomePage() {
             <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Date
             </span>
+            <span className="-mt-1 font-sans text-xs text-muted">
+              {range
+                ? `Covers BS ${range.bs_min_year}–${range.bs_max_year} · AD ${range.ad_min} – ${range.ad_max}`
+                : "Covers a bundled BS/AD date range"}
+            </span>
             <input
               value={value}
               onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
@@ -144,14 +170,14 @@ export default function HomePage() {
                     ? `${today.bs.iso} or ${today.bs.named}`
                     : "2081-04-15 or 15 Shrawan 2081"
               }
-              className="rounded border border-panel-line bg-casing-deep px-4 py-3 font-flap text-lg text-ivory placeholder:text-muted/60 focus:border-amber"
+              className="rounded-2xl border border-panel-line bg-casing-deep px-4 py-3 font-flap text-lg text-ivory placeholder:text-muted/60 focus:border-amber"
             />
           </label>
 
           <button
             type="submit"
             disabled={value.trim().length === 0}
-            className="w-fit rounded-full bg-bezel px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-ivory transition-colors hover:bg-amber hover:text-amber-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-bezel disabled:hover:text-ivory"
+            className="w-fit cursor-pointer rounded-2xl bg-amber px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-amber-ink transition-colors hover:bg-amber/80 disabled:cursor-not-allowed disabled:bg-bezel disabled:text-ivory disabled:opacity-40"
           >
             Flip the board
           </button>
@@ -162,7 +188,7 @@ export default function HomePage() {
         <BoardPanel className="flex flex-col gap-3 px-5 py-6 sm:px-8">
           <FlapRow label="Error" value="ERROR" size="md" hazard />
           <p className="flex items-start gap-2 font-sans text-sm text-hazard">
-            <WarningIcon className="mt-0.5 h-4 w-4 flex-shrink-0" />
+            <WarningIcon className="mt-0.5 h-4 w-4 shrink-0" />
             {error}
           </p>
         </BoardPanel>

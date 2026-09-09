@@ -178,7 +178,7 @@ body {
   color: var(--flap-ink);
   font-family: var(--font-flap);
   font-weight: 700;
-  border-radius: 3px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
   box-shadow:
