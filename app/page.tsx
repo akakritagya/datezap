@@ -151,7 +151,7 @@ export default function HomePage() {
           <button
             type="submit"
             disabled={value.trim().length === 0}
-            className="w-fit rounded bg-bezel px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-ivory transition-colors hover:bg-amber hover:text-amber-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-bezel disabled:hover:text-ivory"
+            className="w-fit rounded-full bg-bezel px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-ivory transition-colors hover:bg-amber hover:text-amber-ink disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-bezel disabled:hover:text-ivory"
           >
             Flip the board
           </button>
