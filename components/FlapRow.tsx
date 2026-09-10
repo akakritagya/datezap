@@ -43,14 +43,18 @@ export function FlapRow({ value, label, size = "md", hazard = false, trailing }:
             }`}
           >
             {!blank && !hazard && (
-              <span key={char} className="flap-cell__face">
+              <span
+                key={char}
+                className="flap-cell__face"
+                style={{ animationDelay: `${Math.min(index, 20) * 45}ms` }}
+              >
                 {char}
               </span>
             )}
           </span>
         );
       })}
-      {trailing}
+      {trailing && <span className="ml-2">{trailing}</span>}
     </div>
   );
 }

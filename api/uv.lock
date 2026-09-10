@@ -180,6 +180,7 @@ dependencies = [
     { name = "fastapi" },
     { name = "nepkit" },
     { name = "pydantic" },
+    { name = "tzdata" },
 ]
 
 [package.dev-dependencies]
@@ -198,6 +199,7 @@ requires-dist = [
     { name = "fastapi", specifier = ">=0.115,<1" },
     { name = "nepkit", specifier = ">=0.4,<0.5" },
     { name = "pydantic", specifier = ">=2.9,<3" },
+    { name = "tzdata", specifier = ">=2025.2" },
 ]
 
 [package.metadata.requires-dev]
@@ -521,7 +523,7 @@ wheels = [
 
 [[package]]
 name = "nepkit"
-version = "0.4.0"
+version = "0.4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyreadline3", marker = "sys_platform == 'win32'" },
@@ -529,9 +531,9 @@ dependencies = [
     { name = "typer" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/20/20/048e7b1af2f2492d15d6c6d25e9cbf6e0abfd7bf4d7838d6fe629f38f86a/nepkit-0.4.0.tar.gz", hash = "sha256:9f4488c09cc221fa889fa74d937399703a368c21ab48e3a6437541657f47457f", size = 37157, upload-time = "2026-09-08T13:04:00.081Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/02/64f7b3980612efb5d202e047cf9659cd2206d4b2f84eed1dac58013808c8/nepkit-0.4.1.tar.gz", hash = "sha256:21c0475f50c58ee2d84eb8097111a0fa5a365ff1a03f6aa2bca59a3d8eaad45e", size = 37296, upload-time = "2026-09-10T18:40:47.254Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/97/9c/80e1b3b00a8fe9486d553c17130b6675a052ddea01451af970b00049d1ed/nepkit-0.4.0-py3-none-any.whl", hash = "sha256:bb3b35383b20a43c67700c1b8c7a100462aea4f5ca3b7f9040a78826ba165393", size = 40417, upload-time = "2026-09-08T13:03:58.927Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/4b/20333ce28486604420eff5093593bc4ff695f92b075fc3fce47da37a8e9a/nepkit-0.4.1-py3-none-any.whl", hash = "sha256:f586164e58b923fb1bd7a82f0cb3bc84bb9c02c476220a020d5a25364a343861", size = 40587, upload-time = "2026-09-10T18:40:45.972Z" },
 ]
 
 [[package]]

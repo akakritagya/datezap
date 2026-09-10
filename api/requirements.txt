@@ -19,7 +19,7 @@ markdown-it-py==4.2.0
     # via rich
 mdurl==0.1.2
     # via markdown-it-py
-nepkit==0.4.0
+nepkit==0.4.1
     # via datezap-api
 pydantic==2.13.5
     # via
@@ -53,5 +53,7 @@ typing-inspection==0.4.4
     # via
     #   fastapi
     #   pydantic
-tzdata==2026.3 ; sys_platform == 'win32'
-    # via nepkit
+tzdata==2026.3
+    # via
+    #   datezap-api
+    #   nepkit
