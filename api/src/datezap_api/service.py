@@ -6,6 +6,8 @@ from typing import Literal
 
 import nepkit
 
+from datezap_api.clock import today_in_nepal
+
 
 @dataclass(frozen=True, slots=True)
 class ConvertResult:
@@ -24,7 +26,7 @@ def convert_date(direction: Literal["bs2ad", "ad2bs"], value: str) -> ConvertRes
 
 
 def get_today(today: date | None = None) -> ConvertResult:
-    ad = today if today is not None else date.today()
+    ad = today if today is not None else today_in_nepal()
     bs = nepkit.ad_to_bs(ad)
     return ConvertResult(bs=bs, ad=ad)
 

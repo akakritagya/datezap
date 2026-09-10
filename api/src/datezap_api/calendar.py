@@ -6,6 +6,8 @@ from datetime import date
 import nepkit
 from nepkit.render import bs_month_grid
 
+from datezap_api.clock import today_in_nepal
+
 
 @dataclass(frozen=True, slots=True)
 class CalendarMonth:
@@ -21,7 +23,7 @@ class CalendarMonth:
 def get_calendar_month(
     year: int, month: int, today: date | None = None, devnagari: bool = False
 ) -> CalendarMonth:
-    today_ad = today if today is not None else date.today()
+    today_ad = today if today is not None else today_in_nepal()
     today_bs = nepkit.ad_to_bs(today_ad)
     # bs_month_grid's own devnagari rendering also converts the subtitle's
     # AD-range numerals -- fetch it in Latin always and compose the BS-only
