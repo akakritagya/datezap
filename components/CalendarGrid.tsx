@@ -53,7 +53,11 @@ export function CalendarGrid({ weeks, onDayClick, selectedDay = null, compact = 
                         selected ? "flap-cell--selected" : ""
                       }`}
                     >
-                      <span className="flap-cell__face" key={cell.bs_day}>
+                      <span
+                        className="flap-cell__face"
+                        key={cell.bs_day}
+                        style={{ animationDelay: `${(weekIndex * 7 + cellIndex) * 18}ms` }}
+                      >
                         {cell.day_label}
                       </span>
                       {selected && (
