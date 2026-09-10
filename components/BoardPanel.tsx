@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import type { MouseEventHandler, ReactNode } from "react";
 
 type BoardPanelProps = {
@@ -6,12 +7,14 @@ type BoardPanelProps = {
   onClick?: MouseEventHandler<HTMLDivElement>;
 };
 
-export function BoardPanel({ children, className = "", onClick }: BoardPanelProps) {
-  return (
-    <div className={`board-panel ${className}`} onClick={onClick}>
-      <span className="rivet rivet-left" />
-      <span className="rivet rivet-right" />
-      {children}
-    </div>
-  );
-}
+export const BoardPanel = forwardRef<HTMLDivElement, BoardPanelProps>(
+  function BoardPanel({ children, className = "", onClick }, ref) {
+    return (
+      <div ref={ref} className={`board-panel ${className}`} onClick={onClick}>
+        <span className="rivet rivet-left" />
+        <span className="rivet rivet-right" />
+        {children}
+      </div>
+    );
+  },
+);

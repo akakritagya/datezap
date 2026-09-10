@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { ApiError, convertDate, getRange, getToday } from "@/lib/api";
-import type { ConvertDirection, ConvertResponse, DateRangeResponse, TodayResponse } from "@/lib/api";
+import type {
+  ConvertDirection,
+  ConvertResponse,
+  DateRangeResponse,
+  TodayResponse,
+} from "@/lib/api";
 import { BoardPanel } from "@/components/BoardPanel";
 import { CopyButton } from "@/components/CopyButton";
 import { FlapRow } from "@/components/FlapRow";
+import { InlineDate } from "@/components/InlineDate";
 import { WarningIcon } from "@/components/icons";
 import { useDevnagari } from "@/lib/devnagari-context";
 
@@ -14,9 +20,10 @@ export default function HomePage() {
   const { devnagari } = useDevnagari();
   const [direction, setDirection] = useState<ConvertDirection>("bs2ad");
   const [value, setValue] = useState("");
-  const [submitted, setSubmitted] = useState<{ direction: ConvertDirection; value: string } | null>(
-    null,
-  );
+  const [submitted, setSubmitted] = useState<{
+    direction: ConvertDirection;
+    value: string;
+  } | null>(null);
   const [result, setResult] = useState<ConvertResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [today, setToday] = useState<TodayResponse | null>(null);
@@ -24,7 +31,10 @@ export default function HomePage() {
   // The "Today" widget's BS side honors the toggle; the input placeholder is
   // a typing hint and must stay in the Latin format users can actually type,
   // so it's always built from `today` (fetched without devnagari) below.
-  const [todayBsNamedDevnagari, setTodayBsNamedDevnagari] = useState<string | null>(null);
+  const [todayBsNamedDevnagari, setTodayBsNamedDevnagari] = useState<
+    string | null
+  >(null);
+  const outcomeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     getToday()
@@ -59,12 +69,22 @@ export default function HomePage() {
       })
       .catch((err) => {
         if (cancelled) return;
-        setError(err instanceof ApiError ? err.message : "Something went wrong.");
+        setError(
+          err instanceof ApiError ? err.message : "Something went wrong.",
+        );
       });
     return () => {
       cancelled = true;
     };
   }, [submitted, devnagari]);
+
+  // Scroll the outcome into view once the result (or an error) lands, since
+  // the flip button sits above the fold on short viewports and the converted
+  // date would otherwise render off-screen.
+  useEffect(() => {
+    if (!result && !error) return;
+    outcomeRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [result, error]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,32 +94,73 @@ export default function HomePage() {
   }
 
   return (
-    <main className="mx-auto flex max-w-4xl flex-col gap-10 px-6 py-10 sm:py-14">
+    <main className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-10 sm:py-14">
       <div>
         <h1 className="font-display text-4xl font-extrabold uppercase tracking-tight text-ivory sm:text-5xl">
           Single-date converter
         </h1>
         <p className="mt-2 max-w-prose font-sans text-muted">
-          Type a Bikram Sambat or Gregorian date — ISO or natural language — and watch it flap
-          into the other calendar, live from the API.
+          Type a Bikram Sambat or Gregorian date in ISO or natural language.
+          Watch it flap into the other calendar, live from the API.
         </p>
       </div>
 
-      <BoardPanel className="flex flex-wrap items-center justify-between gap-4 px-5 py-4 sm:px-7">
-        <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-panel-line bg-panel/60 px-5 py-3">
+        <span className="flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+          <span className="pilot-dot" />
           Today
         </span>
         {today ? (
           <div className="flex flex-wrap items-center gap-4">
             <FlapRow
               label="Today in Bikram Sambat"
-              value={devnagari && todayBsNamedDevnagari ? todayBsNamedDevnagari : today.bs.named}
+              value={
+                devnagari && todayBsNamedDevnagari
+                  ? todayBsNamedDevnagari
+                  : today.bs.named
+              }
               size="sm"
             />
-            <span className="font-sans text-sm text-muted">{today.ad_named}</span>
+            <InlineDate className="text-sm">{today.ad_named}</InlineDate>
           </div>
         ) : (
-          <span className="font-sans text-sm text-muted">Reading the clock&hellip;</span>
+          <span className="font-sans text-sm text-muted">
+            Reading the clock&hellip;
+          </span>
+        )}
+      </div>
+
+      <BoardPanel className="flex flex-col gap-5 px-5 py-7 sm:px-8 sm:py-9">
+        <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+          Coverage
+        </span>
+        {range ? (
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <span className="font-sans text-[11px] uppercase tracking-[0.12em] text-muted">
+                Bikram Sambat
+              </span>
+              <p className="flex flex-wrap items-center gap-2 font-sans text-sm text-ivory">
+                <InlineDate>{range.bs_min_year}</InlineDate>
+                <span className="text-muted">to</span>
+                <InlineDate>{range.bs_max_year}</InlineDate>
+              </p>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <span className="font-sans text-[11px] uppercase tracking-[0.12em] text-muted">
+                Gregorian
+              </span>
+              <p className="flex flex-wrap items-center gap-2 font-sans text-sm text-ivory">
+                <InlineDate>{range.ad_min}</InlineDate>
+                <span className="text-muted">to</span>
+                <InlineDate>{range.ad_max}</InlineDate>
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="font-sans text-sm text-muted">
+            Loading the supported range.
+          </p>
         )}
       </BoardPanel>
 
@@ -116,7 +177,9 @@ export default function HomePage() {
                     id: "bs2ad",
                     label: (
                       <>
-                        BS <span className="inline-block -translate-y-0.5">→</span> AD
+                        BS{" "}
+                        <span className="inline-block -translate-y-0.5">→</span>{" "}
+                        AD
                       </>
                     ),
                   },
@@ -124,7 +187,9 @@ export default function HomePage() {
                     id: "ad2bs",
                     label: (
                       <>
-                        AD <span className="inline-block -translate-y-0.5">→</span> BS
+                        AD{" "}
+                        <span className="inline-block -translate-y-0.5">→</span>{" "}
+                        BS
                       </>
                     ),
                   },
@@ -154,14 +219,11 @@ export default function HomePage() {
             <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Date
             </span>
-            <span className="-mt-1 font-sans text-xs text-muted">
-              {range
-                ? `Covers BS ${range.bs_min_year} – ${range.bs_max_year} · AD ${range.ad_min} – ${range.ad_max}`
-                : "Covers a bundled BS/AD date range"}
-            </span>
             <input
               value={value}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setValue(event.target.value)
+              }
               placeholder={
                 direction === "ad2bs"
                   ? today
@@ -178,7 +240,7 @@ export default function HomePage() {
           <button
             type="submit"
             disabled={value.trim().length === 0}
-            className="w-fit cursor-pointer rounded-2xl bg-amber px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-amber-ink transition-colors hover:bg-amber/80 disabled:cursor-not-allowed disabled:bg-bezel disabled:text-ivory disabled:opacity-40"
+            className="w-fit cursor-pointer rounded-2xl border border-ivory/15 bg-ivory/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-ivory shadow-[inset_0_1px_0_rgba(243,237,224,0.15)] backdrop-blur-sm transition-colors duration-300 ease-out hover:border-amber hover:bg-amber hover:text-amber-ink hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] hover:backdrop-blur-none disabled:cursor-not-allowed disabled:border-panel-line disabled:bg-bezel/40 disabled:text-ivory disabled:opacity-40 disabled:shadow-none disabled:backdrop-blur-none"
           >
             Flip the board
           </button>
@@ -186,7 +248,10 @@ export default function HomePage() {
       </BoardPanel>
 
       {error && (
-        <BoardPanel className="flex flex-col gap-3 px-5 py-6 sm:px-8">
+        <BoardPanel
+          ref={outcomeRef}
+          className="flex flex-col gap-3 px-5 py-6 sm:px-8"
+        >
           <FlapRow label="Error" value="ERROR" size="md" hazard />
           <p className="flex items-start gap-2 font-sans text-sm text-hazard">
             <WarningIcon className="mt-0.5 h-4 w-4 shrink-0" />
@@ -196,7 +261,10 @@ export default function HomePage() {
       )}
 
       {result && (
-        <BoardPanel className="flex flex-col gap-6 px-5 py-7 sm:px-8 sm:py-9">
+        <BoardPanel
+          ref={outcomeRef}
+          className="flex flex-col gap-6 px-5 py-7 sm:px-8 sm:py-9"
+        >
           <div className="flex flex-col gap-2">
             <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Bikram Sambat (BS)
@@ -205,7 +273,13 @@ export default function HomePage() {
               label="Bikram Sambat result"
               value={result.bs.named}
               size="lg"
-              trailing={<CopyButton value={result.bs.iso} label="Bikram Sambat date" size="lg" />}
+              trailing={
+                <CopyButton
+                  value={result.bs.iso}
+                  label="Bikram Sambat date"
+                  size="lg"
+                />
+              }
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -216,7 +290,13 @@ export default function HomePage() {
               label="Gregorian result"
               value={result.ad_named}
               size="lg"
-              trailing={<CopyButton value={result.ad} label="Gregorian date" size="lg" />}
+              trailing={
+                <CopyButton
+                  value={result.ad}
+                  label="Gregorian date"
+                  size="lg"
+                />
+              }
             />
           </div>
         </BoardPanel>

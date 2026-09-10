@@ -150,7 +150,7 @@ The system is layered and structural, not flat and not merely ambient: every phy
 
 ## Shapes
 
-Corners are small and consistent: `10px` on board panels, `6px` on buttons/inputs/pills, `3px` on flap cells (just enough to read as trimmed card stock, not app-chrome rounding), and full pill radius only on the pilot-dot. `.board-panel` carries two visible rivet dots (`::before`/`::after` top corners, `.rivet` spans bottom corners) — a recurring bolted-housing silhouette on every panel instance. `.flap-cell` carries a fixed horizontal split line at its vertical center (`::after`, 1px, `rgba(0,0,0,0.22)`) on every cell, representing the physical seam where the flap folds — this is present whether or not the cell is animating.
+Box sections (board panels and the today-strip) carry a generous `20px` radius; smaller controls stay crisper — `6px` on buttons/inputs/pills, `3px` on flap cells (just enough to read as trimmed card stock, not app-chrome rounding) — and full pill radius only on the pilot-dot. `.board-panel` carries two visible rivet dots (`::before`/`::after` top corners, `.rivet` spans bottom corners) — a recurring bolted-housing silhouette on every panel instance. `.flap-cell` carries a fixed horizontal split line at its vertical center (`::after`, 1px, `rgba(0,0,0,0.22)`) on every cell, representing the physical seam where the flap folds — this is present whether or not the cell is animating.
 
 ## Components
 
@@ -161,7 +161,7 @@ Corners are small and consistent: `10px` on board panels, `6px` on buttons/input
 - **Ghost/nav-adjacent (Prev/Next, API docs):** transparent-ish casing-deep background, panel-line border, hover swaps border and text to amber/ivory. Disabled boundary state swaps border to hazard-tinted and swaps the leading/trailing icon from chevron to `EndStopIcon` rather than just dimming.
 
 ### Cards / Containers
-- **Corner Style:** 10px radius (`.board-panel`).
+- **Corner Style:** 20px radius (`.board-panel`).
 - **Background:** panel (`#1c1a15`) over casing background.
 - **Shadow Strategy:** see Elevation & Depth — Panel housing shadow, always paired with the two-rivet decoration.
 - **Border:** 1px `panel-line` (`#322d24`).
