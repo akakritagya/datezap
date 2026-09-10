@@ -5,6 +5,7 @@ import type { ChangeEvent, FormEvent } from "react";
 import { ApiError, convertDate, getRange, getToday } from "@/lib/api";
 import type { ConvertDirection, ConvertResponse, DateRangeResponse, TodayResponse } from "@/lib/api";
 import { BoardPanel } from "@/components/BoardPanel";
+import { CopyButton } from "@/components/CopyButton";
 import { FlapRow } from "@/components/FlapRow";
 import { WarningIcon } from "@/components/icons";
 import { useDevnagari } from "@/lib/devnagari-context";
@@ -200,15 +201,23 @@ export default function HomePage() {
             <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Bikram Sambat (BS)
             </span>
-            <FlapRow label="Bikram Sambat result" value={result.bs.named} size="lg" />
-            <span className="font-sans text-sm text-muted">{result.bs.iso}</span>
+            <FlapRow
+              label="Bikram Sambat result"
+              value={result.bs.named}
+              size="lg"
+              trailing={<CopyButton value={result.bs.iso} label="Bikram Sambat date" size="lg" />}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-muted">
               Gregorian (AD)
             </span>
-            <FlapRow label="Gregorian result" value={result.ad_named} size="lg" />
-            <span className="font-sans text-sm text-muted">{result.ad}</span>
+            <FlapRow
+              label="Gregorian result"
+              value={result.ad_named}
+              size="lg"
+              trailing={<CopyButton value={result.ad} label="Gregorian date" size="lg" />}
+            />
           </div>
         </BoardPanel>
       )}

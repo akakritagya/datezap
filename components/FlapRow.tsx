@@ -1,11 +1,14 @@
+import type { ReactNode } from "react";
+
 type FlapRowProps = {
   value: string;
   label: string;
   size?: "sm" | "md" | "lg";
   hazard?: boolean;
+  trailing?: ReactNode;
 };
 
-const SIZE_CLASSES: Record<NonNullable<FlapRowProps["size"]>, string> = {
+export const SIZE_CLASSES: Record<NonNullable<FlapRowProps["size"]>, string> = {
   sm: "h-7 w-5 text-sm",
   md: "h-11 w-8 text-xl",
   lg: "h-16 w-11 text-3xl sm:h-20 sm:w-14 sm:text-4xl",
@@ -24,12 +27,12 @@ function splitGraphemes(value: string): string[] {
   return segmenter ? Array.from(segmenter.segment(value), (s) => s.segment) : Array.from(value);
 }
 
-export function FlapRow({ value, label, size = "md", hazard = false }: FlapRowProps) {
+export function FlapRow({ value, label, size = "md", hazard = false, trailing }: FlapRowProps) {
   const chars = splitGraphemes(value);
   const cellClass = SIZE_CLASSES[size];
 
   return (
-    <div role="group" aria-label={label} className="flex flex-wrap gap-1">
+    <div role="group" aria-label={label} className="flex flex-wrap items-center gap-1">
       {chars.map((char, index) => {
         const blank = char === " ";
         return (
@@ -47,6 +50,7 @@ export function FlapRow({ value, label, size = "md", hazard = false }: FlapRowPr
           </span>
         );
       })}
+      {trailing}
     </div>
   );
 }

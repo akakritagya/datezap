@@ -4,6 +4,7 @@ import { useState } from "react";
 import { NepaliDatePicker } from "@/components/NepaliDatePicker";
 import type { NepaliDateSelection } from "@/components/NepaliDatePicker";
 import { BoardPanel } from "@/components/BoardPanel";
+import { CopyButton } from "@/components/CopyButton";
 import { FlapRow } from "@/components/FlapRow";
 import { LatchIcon } from "@/components/icons";
 
@@ -40,11 +41,17 @@ export default function PickerDemoPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <FlapRow label="Selected date, Bikram Sambat" value={selected.bs} size="sm" />
-                <span className="font-sans text-xs text-muted">BS · ISO</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-sans text-xs text-muted">BS · ISO</span>
+                  <CopyButton value={selected.bs} label="Bikram Sambat date" />
+                </div>
               </div>
               <div className="flex flex-col gap-1">
                 <FlapRow label="Selected date, Gregorian" value={selected.ad} size="sm" />
-                <span className="font-sans text-xs text-muted">AD · ISO</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-sans text-xs text-muted">AD · ISO</span>
+                  <CopyButton value={selected.ad} label="Gregorian date" />
+                </div>
               </div>
             </div>
           ) : (
