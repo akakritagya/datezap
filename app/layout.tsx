@@ -41,9 +41,9 @@ const FAVICON = `data:image/svg+xml,${encodeURIComponent(
 )}`;
 
 export const metadata: Metadata = {
-  title: "datezap — Nepali BS ⇄ AD date service",
+  title: "datezap: Nepali BS ⇄ AD date service",
   description:
-    "A live departure board for Bikram Sambat and Gregorian dates: convert, browse the month grid, and embed the picker — powered by nepkit.",
+    "A live departure board for Bikram Sambat and Gregorian dates: convert, browse the month grid, and embed the picker, powered by nepkit.",
   icons: [{ url: FAVICON, type: "image/svg+xml" }],
 };
 
@@ -75,6 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 -->`,
           }}
         />
+        <div className="grain-overlay" aria-hidden="true" />
         <DevnagariProvider>
           <Nav />
           <div className="flex-1">{children}</div>

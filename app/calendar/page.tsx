@@ -75,7 +75,7 @@ export default function CalendarPage() {
         </h1>
         <p className="mt-2 max-w-prose font-sans text-muted">
           A Bikram Sambat month grid, board-side. The Gregorian date for any day rides in its
-          title — hover or focus a cell.
+          title, so hover or focus a cell to see it.
         </p>
       </div>
 

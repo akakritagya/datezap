@@ -16,7 +16,7 @@ export function Nav() {
   const { devnagari, setDevnagari } = useDevnagari();
 
   return (
-    <header className="w-full border-b border-panel-line bg-casing-deep">
+    <header className="sticky top-0 z-50 w-full border-b border-panel-line bg-casing-deep">
       <div className="mx-auto flex max-w-5xl flex-col gap-2 px-4 pt-3 pb-0 sm:px-6 sm:pt-4">
         <div className="flex items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2.5">

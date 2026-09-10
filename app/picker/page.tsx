@@ -6,6 +6,7 @@ import type { NepaliDateSelection } from "@/components/NepaliDatePicker";
 import { BoardPanel } from "@/components/BoardPanel";
 import { CopyButton } from "@/components/CopyButton";
 import { FlapRow } from "@/components/FlapRow";
+import { InlineDate } from "@/components/InlineDate";
 import { LatchIcon } from "@/components/icons";
 
 export default function PickerDemoPage() {
@@ -18,9 +19,10 @@ export default function PickerDemoPage() {
           Embeddable picker
         </h1>
         <p className="mt-2 max-w-prose font-sans text-muted">
-          The <code className="rounded bg-panel px-1.5 py-0.5 font-flap text-sm text-flap-dim">&lt;NepaliDatePicker&gt;</code>{" "}
-          module below drops into any form. Click a day to latch it in, the way a real form
-          would.
+          The{" "}
+          <InlineDate className="text-sm">&lt;NepaliDatePicker&gt;</InlineDate>{" "}
+          module below drops into any form. Click a day to latch it in, the way
+          a real form would.
         </p>
       </div>
 
@@ -40,14 +42,22 @@ export default function PickerDemoPage() {
                 </span>
               </div>
               <div className="flex flex-col gap-1">
-                <FlapRow label="Selected date, Bikram Sambat" value={selected.bs} size="sm" />
+                <FlapRow
+                  label="Selected date, Bikram Sambat"
+                  value={selected.bs}
+                  size="sm"
+                />
                 <div className="flex items-center gap-1.5">
                   <span className="font-sans text-xs text-muted">BS · ISO</span>
                   <CopyButton value={selected.bs} label="Bikram Sambat date" />
                 </div>
               </div>
               <div className="flex flex-col gap-1">
-                <FlapRow label="Selected date, Gregorian" value={selected.ad} size="sm" />
+                <FlapRow
+                  label="Selected date, Gregorian"
+                  value={selected.ad}
+                  size="sm"
+                />
                 <div className="flex items-center gap-1.5">
                   <span className="font-sans text-xs text-muted">AD · ISO</span>
                   <CopyButton value={selected.ad} label="Gregorian date" />
@@ -56,7 +66,7 @@ export default function PickerDemoPage() {
             </div>
           ) : (
             <p className="mt-3 font-sans text-sm text-muted">
-              Nothing selected yet — click a day on the board.
+              Nothing selected yet. Click a day on the board.
             </p>
           )}
         </BoardPanel>
