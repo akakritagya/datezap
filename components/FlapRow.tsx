@@ -79,7 +79,7 @@ export function FlapRow({ value, label, size = "md", hazard = false, trailing }:
           </span>
         );
       })}
-      {trailing && <span className="ml-2">{trailing}</span>}
+      {trailing}
     </div>
   );
 }
