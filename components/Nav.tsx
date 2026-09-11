@@ -14,9 +14,13 @@ const ROUTES = [
 export function Nav() {
   const pathname = usePathname();
   const { devnagari, setDevnagari } = useDevnagari();
+  const currentIndex = ROUTES.findIndex((route) => route.href === pathname);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-panel-line bg-casing-deep">
+    <header
+      style={{ viewTransitionName: "site-header" }}
+      className="sticky top-0 z-50 w-full border-b border-panel-line bg-casing-deep"
+    >
       <div className="mx-auto flex max-w-5xl flex-col gap-2 px-4 pt-3 pb-0 sm:px-6 sm:pt-4">
         <div className="flex items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2.5">
@@ -46,12 +50,17 @@ export function Nav() {
 
         <div className="flex flex-wrap items-center justify-center gap-5">
           <nav aria-label="Board sections" className="flex items-center gap-4">
-            {ROUTES.map((route) => {
+            {ROUTES.map((route, index) => {
               const active = pathname === route.href;
+              const transitionTypes =
+                currentIndex === -1 || index === currentIndex
+                  ? undefined
+                  : [index > currentIndex ? "nav-forward" : "nav-back"];
               return (
                 <Link
                   key={route.href}
                   href={route.href}
+                  transitionTypes={transitionTypes}
                   aria-current={active ? "page" : undefined}
                   className={`relative px-0.5 pt-0.5 pb-2 font-display text-sm font-bold uppercase tracking-wide transition-colors ${
                     active ? "text-amber" : "text-muted hover:text-amber"

@@ -6,6 +6,7 @@ import { ApiError, getCalendarMonth, getToday, resolveMonthQuery } from "@/lib/a
 import type { CalendarDayCell, CalendarResponse } from "@/lib/api";
 import { CalendarGrid } from "@/components/CalendarGrid";
 import { BoardPanel } from "@/components/BoardPanel";
+import { SkeletonBar } from "@/components/SkeletonBar";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/icons";
 import { useDevnagari } from "@/lib/devnagari-context";
 
@@ -165,7 +166,7 @@ export function NepaliDatePicker({
             disabled={!data}
             className="rounded font-display text-sm font-bold uppercase tracking-wide text-ivory transition-colors enabled:cursor-pointer enabled:hover:text-amber disabled:cursor-default"
           >
-            {data?.title ?? "Loading…"}
+            {data?.title ?? <SkeletonBar className="inline-block h-4 w-24 align-middle" />}
           </button>
           <button
             onClick={goToNextMonth}
@@ -176,8 +177,22 @@ export function NepaliDatePicker({
           </button>
         </div>
         {error && <p className="px-1 py-2 font-sans text-xs text-hazard">{error}</p>}
-        {data && (
-          <CalendarGrid weeks={data.weeks} onDayClick={handleDayClick} selectedDay={selectedDay} compact />
+        {data ? (
+          <CalendarGrid
+            weeks={data.weeks}
+            onDayClick={handleDayClick}
+            selectedDay={selectedDay}
+            compact
+            monthLabel={data.title}
+          />
+        ) : (
+          !error && (
+            <div className="grid grid-cols-7 gap-1.5" aria-hidden="true">
+              {Array.from({ length: 35 }).map((_, index) => (
+                <div key={index} className="flap-cell flap-cell--loading aspect-square animate-pulse" />
+              ))}
+            </div>
+          )
         )}
       </BoardPanel>
       {isSearchOpen && (

@@ -42,10 +42,11 @@ typography:
     lineHeight: 1.3
     letterSpacing: "0.14em"
 rounded:
-  sm: "3px"
+  sm: "8px"
   md: "6px"
-  lg: "10px"
+  lg: "20px"
   pill: "999px"
+  focus-ring: "3px"
 spacing:
   xs: "4px"
   sm: "8px"
@@ -150,7 +151,7 @@ The system is layered and structural, not flat and not merely ambient: every phy
 
 ## Shapes
 
-Box sections (board panels and the today-strip) carry a generous `20px` radius; smaller controls stay crisper — `6px` on buttons/inputs/pills, `3px` on flap cells (just enough to read as trimmed card stock, not app-chrome rounding) — and full pill radius only on the pilot-dot. `.board-panel` carries two visible rivet dots (`::before`/`::after` top corners, `.rivet` spans bottom corners) — a recurring bolted-housing silhouette on every panel instance. `.flap-cell` carries a fixed horizontal split line at its vertical center (`::after`, 1px, `rgba(0,0,0,0.22)`) on every cell, representing the physical seam where the flap folds — this is present whether or not the cell is animating.
+Box sections (board panels and the today-strip) carry a generous `20px` radius; smaller controls stay crisper — `6px` on buttons, inputs, and the direction toggle group, `8px` on flap cells (just enough to read as trimmed card stock, not app-chrome rounding) — and full pill radius on the pilot-dot plus the handful of round controls that are deliberately circular/pill-shaped (Devnagari toggle, calendar Prev/Next). The global `:focus-visible` ring uses its own smaller `3px` corner radius rather than matching whatever it's wrapping — it has to generically outline buttons, inputs, pills, and flap cells alike, so it can't inherit any one of their radii. `.board-panel` carries two visible rivet dots (`::before`/`::after` top corners, `.rivet` spans bottom corners) — a recurring bolted-housing silhouette on every panel instance. `.flap-cell` carries a fixed horizontal split line at its vertical center (`::after`, 1px, `rgba(0,0,0,0.22)`) on every cell, representing the physical seam where the flap folds — this is present whether or not the cell is animating.
 
 ## Components
 

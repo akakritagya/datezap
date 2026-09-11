@@ -27,6 +27,31 @@ function splitGraphemes(value: string): string[] {
   return segmenter ? Array.from(segmenter.segment(value), (s) => s.segment) : Array.from(value);
 }
 
+type FlapRowSkeletonProps = {
+  length: number;
+  size?: "sm" | "md" | "lg";
+  label: string;
+};
+
+// Placeholder flap cells shown while the value a FlapRow will eventually
+// render is still in flight -- sized off the same SIZE_CLASSES so the
+// skeleton doesn't jump when the real row swaps in.
+export function FlapRowSkeleton({ length, size = "md", label }: FlapRowSkeletonProps) {
+  const cellClass = SIZE_CLASSES[size];
+
+  return (
+    <div role="group" aria-label={label} aria-busy="true" className="flex flex-wrap items-center gap-1">
+      {Array.from({ length }).map((_, index) => (
+        <span
+          key={index}
+          aria-hidden="true"
+          className={`flap-cell flap-cell--loading animate-pulse ${cellClass}`}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function FlapRow({ value, label, size = "md", hazard = false, trailing }: FlapRowProps) {
   const chars = splitGraphemes(value);
   const cellClass = SIZE_CLASSES[size];

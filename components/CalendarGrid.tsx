@@ -8,11 +8,21 @@ type CalendarGridProps = {
   onDayClick?: (cell: CalendarDayCell) => void;
   selectedDay?: number | null;
   compact?: boolean;
+  monthLabel?: string;
 };
 
-export function CalendarGrid({ weeks, onDayClick, selectedDay = null, compact = false }: CalendarGridProps) {
+export function CalendarGrid({
+  weeks,
+  onDayClick,
+  selectedDay = null,
+  compact = false,
+  monthLabel,
+}: CalendarGridProps) {
   return (
-    <table className="w-full table-fixed border-separate border-spacing-1.5 text-center">
+    <table
+      className="w-full table-fixed border-separate border-spacing-1.5 text-center"
+      aria-label={monthLabel ? `${monthLabel} calendar` : undefined}
+    >
       <thead>
         <tr>
           {WEEKDAY_HEADERS.map((day) => (
