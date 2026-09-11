@@ -40,7 +40,7 @@ export function CopyButton({ value, label, size, className = "" }: CopyButtonPro
 
   const iconClass = size ? ICON_SIZE_CLASSES[size] : "h-3.5 w-3.5";
   const boxClass = size
-    ? `${SIZE_CLASSES[size]} inline-flex items-center justify-center rounded-lg border border-ivory/15 bg-ivory/10 text-ivory shadow-[inset_0_1px_0_rgba(243,237,224,0.15)] backdrop-blur-sm cursor-pointer transition-colors hover:bg-ivory/20 hover:border-ivory/25`
+    ? `${SIZE_CLASSES[size]} inline-flex items-center justify-center rounded-lg border border-panel-line bg-casing-deep text-muted cursor-pointer transition-colors hover:border-amber hover:text-ivory`
     : "cursor-pointer rounded p-1 text-muted transition-colors hover:text-ivory";
 
   return (
