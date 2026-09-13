@@ -18,6 +18,15 @@ import { SkeletonBar } from "@/components/SkeletonBar";
 import { WarningIcon } from "@/components/icons";
 import { useDevnagari } from "@/lib/devnagari-context";
 
+// `ad` is a plain "YYYY-MM-DD" string with no time zone; parsing as UTC
+// keeps the weekday from shifting with the viewer's local time zone.
+function weekdayFromIso(iso: string): string {
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
+    weekday: "long",
+    timeZone: "UTC",
+  });
+}
+
 export default function HomePage() {
   const { devnagari } = useDevnagari();
   const [direction, setDirection] = useState<ConvertDirection>("bs2ad");
@@ -130,7 +139,9 @@ export default function HomePage() {
                 }
                 size="sm"
               />
-              <InlineDate className="text-sm">{today.ad_named}</InlineDate>
+              <InlineDate className="text-sm">
+                {today.ad_named}, {weekdayFromIso(today.ad)}
+              </InlineDate>
             </div>
           ) : (
             <div className="flex flex-wrap items-center gap-4">
